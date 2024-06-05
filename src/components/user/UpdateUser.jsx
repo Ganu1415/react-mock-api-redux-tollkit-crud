@@ -13,10 +13,15 @@ const UpdateUser = () => {
     age: "",
     gender: "",
   });
-  console.log(id);
+  const [genderError, setGenderError] = useState(false); // State variable to track gender validation error
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUpdateData({ ...updatData, [name]: value });
+    // Clear the gender error when the user makes a selection
+    if (name === "gender") {
+      setGenderError(false);
+    }
   };
   const { users } = useSelector((store) => store.app);
 
@@ -25,9 +30,14 @@ const UpdateUser = () => {
       const allEditdata = users.filter((ele) => ele.id === id);
       setUpdateData(allEditdata[0]);
     }
-  }, []);
+  }, [id, users]);
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!updatData.gender) {
+      // If gender is not selected, set genderError to true
+      setGenderError(true);
+      return;
+    }
     dispatch(updateUser(updatData));
     navigate("/");
   };
@@ -40,7 +50,7 @@ const UpdateUser = () => {
             className="flex text-gray-700 text-sm font-bold mb-2"
             htmlFor="name"
           >
-            Name
+            Name <span className="text-red-500">*</span>
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -50,6 +60,7 @@ const UpdateUser = () => {
             value={updatData && updatData.name}
             onChange={handleChange}
             placeholder="Name "
+            required // Adding the required attribute
           />
         </div>
         <div className="mb-4">
@@ -57,7 +68,7 @@ const UpdateUser = () => {
             className="flex text-gray-700 text-sm font-bold mb-2"
             htmlFor="email"
           >
-            Email
+            Email <span className="text-red-500">*</span>
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -67,6 +78,7 @@ const UpdateUser = () => {
             value={updatData && updatData.email}
             onChange={handleChange}
             placeholder="Email "
+            required // Adding the required attribute
           />
         </div>
         <div className="mb-4">
@@ -88,7 +100,7 @@ const UpdateUser = () => {
         </div>
         <div className="mb-4">
           <label className="flex text-gray-700 text-sm font-bold mb-2">
-            Gender
+            Gender <span className="text-red-500">*</span>
           </label>
           <div className="flex">
             <label className="inline-flex items-center">
@@ -114,6 +126,11 @@ const UpdateUser = () => {
               <span className="ml-2">Female</span>
             </label>
           </div>
+          {genderError && (
+            <p className="text-red-500 text-xs italic">
+              Please select a gender.
+            </p>
+          )}
         </div>
         <div className="flex items-center justify-end">
           <button

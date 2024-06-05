@@ -35,12 +35,12 @@ export const showUser= createAsyncThunk("showUser", async(data,{rejectWithValue}
 })
 // UpdateUser
 export const updateUser = createAsyncThunk("update/user", async (data,{rejectWithValue}) => {
-    console.log(data.id)
+    
     try {
         const response = await axios.put(`https://665db952e88051d60407fed6.mockapi.io/crud/${data.id}`, {
             ...data
         })
-        console.log(response.data)
+        
         return response.data
     } catch (error) {
         return rejectWithValue(error)

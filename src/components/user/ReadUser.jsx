@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { deleteUser, showUser } from "../../features/user/userDetailSlice";
 import CustomPopup from "./CustomPopup";
+import { PencilIcon, TrashIcon, EyeIcon } from "@heroicons/react/outline";
 
-const ReadCrud = () => {
+const ReadUser = () => {
   const dispatch = useDispatch();
   const naviagte = useNavigate();
   const { users, loading, searchData } = useSelector((store) => store.app);
@@ -166,7 +167,7 @@ const ReadCrud = () => {
                           </td>
                           <td className="text-center">{item.age}</td>
                           <td className="text-center">{item.gender}</td>
-                          <td className="text-center">
+                          {/* <td className="text-center">
                             <Link to={`/edit/${item.id}`}>
                               <button>Edit</button>
                             </Link>
@@ -182,6 +183,29 @@ const ReadCrud = () => {
                             <button onClick={() => handleView(item.id)}>
                               view
                             </button>
+                          </td> */}
+                          <td className="text-center">
+                            <Link to={`/edit/${item.id}`}>
+                              <span className="inline-block align-middle">
+                                <PencilIcon className="h-5 w-5 text-gray-500" />
+                              </span>
+                            </Link>
+                          </td>
+                          <td className="text-center">
+                            <span className="inline-block align-middle">
+                              <TrashIcon
+                                className="h-5 w-5 text-red-500 cursor-pointer"
+                                onClick={() => dispatch(deleteUser(item.id))}
+                              />
+                            </span>
+                          </td>
+                          <td className="text-center">
+                            <span className="inline-block align-middle">
+                              <EyeIcon
+                                className="h-5 w-5 text-blue-500 cursor-pointer"
+                                onClick={() => handleView(item.id)}
+                              />
+                            </span>
                           </td>
                         </tr>
                       );
@@ -200,4 +224,4 @@ const ReadCrud = () => {
   );
 };
 
-export default ReadCrud;
+export default ReadUser;
